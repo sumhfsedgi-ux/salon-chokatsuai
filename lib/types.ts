@@ -22,7 +22,7 @@ export const DiagnosisResultSchema = z.object({
   why_chomomi: z
     .string()
     .describe(
-      "なぜ『腸もみ』が必要なのかのニッチな教育的解説。深部のこわばりを直接ほぐす意味などを説明する。"
+      "なぜ『腸もみ』が必要なのかのニッチな教育的解説。深部のこわばりを直接ほぐす意味に加え、実際に受けることで起こる体の変化（柔らかさ・巡り・お通じ・くびれなど）を具体的に伝える。"
     ),
   closing_offer: z
     .string()
