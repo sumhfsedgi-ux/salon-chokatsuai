@@ -7,25 +7,32 @@ import LoadingAnalyzer from "./LoadingAnalyzer";
 import ProgressBar from "./ProgressBar";
 import QuestionScreen from "./QuestionScreen";
 import ResultScreen from "./ResultScreen";
+import StartScreen from "./StartScreen";
 import { QUESTIONS } from "@/lib/questions";
 import type { Answers, DiagnosisResult } from "@/lib/types";
 
 type FlowState =
+  | { step: "start" }
   | { step: "question"; index: number; answers: Answers }
   | { step: "loading"; answers: Answers }
   | { step: "result"; result: DiagnosisResult }
   | { step: "error"; message: string; answers: Answers };
 
 type FlowAction =
+  | { type: "START" }
   | { type: "ANSWER_QUESTION"; questionId: string; value: string }
   | { type: "SUBMIT_SUCCESS"; result: DiagnosisResult }
   | { type: "SUBMIT_ERROR"; message: string }
   | { type: "RETRY" };
 
-const initialState: FlowState = { step: "question", index: 0, answers: {} };
+const initialState: FlowState = { step: "start" };
 
 function reducer(state: FlowState, action: FlowAction): FlowState {
   switch (action.type) {
+    case "START":
+      return state.step === "start"
+        ? { step: "question", index: 0, answers: {} }
+        : state;
     case "ANSWER_QUESTION": {
       if (state.step !== "question") return state;
       const answers = { ...state.answers, [action.questionId]: action.value };
@@ -97,10 +104,17 @@ export default function DiagnosisFlow() {
         </div>
       )}
       <AnimatePresence mode="wait">
+        {state.step === "start" && (
+          <StartScreen
+            key="start"
+            onStart={() => dispatch({ type: "START" })}
+          />
+        )}
         {state.step === "question" && (
           <QuestionScreen
             key={QUESTIONS[state.index].id}
             question={QUESTIONS[state.index]}
+            questionNumber={state.index + 1}
             onAnswer={(value) =>
               dispatch({
                 type: "ANSWER_QUESTION",

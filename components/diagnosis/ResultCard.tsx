@@ -20,6 +20,13 @@ const TONE_EYEBROW_STYLES: Record<ResultCardTone, string> = {
   offer: "text-rose-700",
 };
 
+const TONE_ICONS: Record<ResultCardTone, string> = {
+  empathy: "🔍",
+  insight: "💭",
+  education: "🌿",
+  offer: "✨",
+};
+
 export default function ResultCard({
   eyebrow,
   body,
@@ -28,9 +35,10 @@ export default function ResultCard({
   return (
     <div className={`rounded-2xl border p-5 shadow-sm ${TONE_STYLES[tone]}`}>
       <p
-        className={`mb-2 text-xs font-bold tracking-wide ${TONE_EYEBROW_STYLES[tone]}`}
+        className={`mb-2 flex items-center gap-1.5 text-xs font-bold tracking-wide ${TONE_EYEBROW_STYLES[tone]}`}
       >
-        {eyebrow}
+        <span aria-hidden="true">{TONE_ICONS[tone]}</span>
+        <span>{eyebrow}</span>
       </p>
       <p className="whitespace-pre-line text-[15px] leading-relaxed text-neutral-800">
         {body}

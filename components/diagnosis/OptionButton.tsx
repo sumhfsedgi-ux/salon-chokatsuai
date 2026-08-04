@@ -18,13 +18,37 @@ export default function OptionButton({
       type="button"
       onClick={onClick}
       whileTap={{ scale: 0.97 }}
-      className={`min-h-14 w-full rounded-2xl border-2 px-5 py-4 text-left text-base font-medium leading-snug transition-colors ${
+      className={`flex min-h-14 w-full items-center gap-3 rounded-3xl px-5 py-4 text-left text-base font-medium leading-snug transition-colors ${
         selected
-          ? "border-rose-400 bg-rose-50 text-rose-700"
-          : "border-neutral-200 bg-white text-neutral-800"
+          ? "bg-gradient-to-r from-rose-400 to-pink-400 text-white shadow-lg shadow-rose-200"
+          : "bg-white text-neutral-800 shadow-sm shadow-neutral-200/70"
       }`}
     >
-      {label}
+      <span
+        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+          selected ? "border-white/80 bg-white/20" : "border-rose-200"
+        }`}
+      >
+        {selected && (
+          <motion.svg
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            viewBox="0 0 20 20"
+            fill="none"
+            className="h-3.5 w-3.5"
+          >
+            <path
+              d="M4 10.5l3.5 3.5L16 6"
+              stroke="white"
+              strokeWidth={2.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </motion.svg>
+        )}
+      </span>
+      <span>{label}</span>
     </motion.button>
   );
 }

@@ -19,13 +19,13 @@ export default function ResultScreen({ result }: ResultScreenProps) {
       className="flex flex-1 flex-col"
     >
       <div className="flex flex-col gap-4 px-5 pb-8 pt-8">
-        <div className="mb-2 text-center">
-          <p className="text-xs font-semibold tracking-wide text-rose-500">
+        <div className="rounded-3xl bg-gradient-to-r from-rose-400 to-pink-400 px-6 py-6 text-center shadow-lg shadow-rose-200">
+          <p className="text-xs font-semibold uppercase tracking-widest text-white/80">
             AI腸内タイプ診断 結果
           </p>
-          <h1 className="mt-1 text-2xl font-bold text-neutral-900">
-            あなたの診断結果
-          </h1>
+          <p className="mt-2 text-2xl font-bold text-white">
+            {result.type_name}
+          </p>
         </div>
         <ResultCard
           eyebrow="AI診断結果"
