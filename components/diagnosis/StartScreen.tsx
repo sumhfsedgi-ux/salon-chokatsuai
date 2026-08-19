@@ -35,7 +35,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
           whileTap={{ scale: 0.97 }}
           className="w-full rounded-full bg-gradient-to-r from-rose-400 to-rose-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-300/50"
         >
-          【無料】AI診断をスタートする
+          【無料】診断をスタートする
         </motion.button>
       </div>
     </motion.div>
