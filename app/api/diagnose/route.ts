@@ -7,16 +7,19 @@ import {
   getOpenAIClient,
 } from "@/lib/openai";
 import { QUESTIONS } from "@/lib/questions";
-import { DiagnosisResultSchema } from "@/lib/types";
+import { determineGutType } from "@/lib/scoring";
+import { DiagnosisCopySchema, NO_ANSWER, YES_ANSWER } from "@/lib/types";
 
 const GENERIC_ERROR_MESSAGE =
   "診断結果の生成に失敗しました。時間をおいて再度お試しください。";
 
+const YesNoSchema = z.enum([YES_ANSWER, NO_ANSWER]);
+
 const AnswersSchema = z.object(
   Object.fromEntries(
-    QUESTIONS.map((question): [string, z.ZodString] => [
+    QUESTIONS.map((question): [string, typeof YesNoSchema] => [
       question.id,
-      z.string().min(1),
+      YesNoSchema,
     ])
   )
 );
@@ -48,6 +51,7 @@ export async function POST(request: Request) {
   }
 
   const { answers } = parsedRequest.data;
+  const gutType = determineGutType(answers);
 
   try {
     const client = getOpenAIClient();
@@ -55,11 +59,11 @@ export async function POST(request: Request) {
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: DIAGNOSIS_SYSTEM_PROMPT },
-        { role: "user", content: buildDiagnosisUserPrompt(answers) },
+        { role: "user", content: buildDiagnosisUserPrompt(gutType, answers) },
       ],
       response_format: zodResponseFormat(
-        DiagnosisResultSchema,
-        "diagnosis_result"
+        DiagnosisCopySchema,
+        "diagnosis_copy"
       ),
     });
 
@@ -73,7 +77,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 502 });
     }
 
-    return NextResponse.json(message.parsed);
+    return NextResponse.json({ type_name: gutType, ...message.parsed });
   } catch (error) {
     console.error("Failed to generate diagnosis result", error);
     return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 });
