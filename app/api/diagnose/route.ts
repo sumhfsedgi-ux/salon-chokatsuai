@@ -7,7 +7,7 @@ import {
   getOpenAIClient,
 } from "@/lib/openai";
 import { QUESTIONS } from "@/lib/questions";
-import { determineGutType } from "@/lib/scoring";
+import { determineGutTypes } from "@/lib/scoring";
 import { DiagnosisCopySchema, NO_ANSWER, YES_ANSWER } from "@/lib/types";
 
 const GENERIC_ERROR_MESSAGE =
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
   }
 
   const { answers } = parsedRequest.data;
-  const gutType = determineGutType(answers);
+  const gutTypes = determineGutTypes(answers);
 
   try {
     const client = getOpenAIClient();
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: DIAGNOSIS_SYSTEM_PROMPT },
-        { role: "user", content: buildDiagnosisUserPrompt(gutType, answers) },
+        { role: "user", content: buildDiagnosisUserPrompt(gutTypes, answers) },
       ],
       response_format: zodResponseFormat(
         DiagnosisCopySchema,
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 502 });
     }
 
-    return NextResponse.json({ type_name: gutType, ...message.parsed });
+    return NextResponse.json({ type_names: gutTypes, ...message.parsed });
   } catch (error) {
     console.error("Failed to generate diagnosis result", error);
     return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 });

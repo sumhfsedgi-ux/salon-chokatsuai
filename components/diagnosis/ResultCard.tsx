@@ -1,4 +1,4 @@
-type ResultCardTone = "empathy" | "insight" | "education" | "offer";
+type ResultCardTone = "empathy" | "education" | "offer";
 
 type ResultCardProps = {
   eyebrow: string;
@@ -8,21 +8,18 @@ type ResultCardProps = {
 
 const TONE_STYLES: Record<ResultCardTone, string> = {
   empathy: "border-rose-200 bg-rose-50/60",
-  insight: "border-amber-200 bg-amber-50/60",
   education: "border-sky-200 bg-sky-50/60",
   offer: "border-rose-300 bg-rose-50",
 };
 
 const TONE_EYEBROW_STYLES: Record<ResultCardTone, string> = {
   empathy: "text-rose-600",
-  insight: "text-amber-600",
   education: "text-sky-600",
   offer: "text-rose-700",
 };
 
 const TONE_ICONS: Record<ResultCardTone, string> = {
   empathy: "🔍",
-  insight: "💭",
   education: "🌿",
   offer: "✨",
 };

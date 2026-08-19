@@ -24,18 +24,18 @@ export default function ResultScreen({ result }: ResultScreenProps) {
             AI腸内タイプ診断 結果
           </p>
           <p className="mt-2 text-2xl font-bold text-white">
-            {result.type_name}
+            {result.type_names.join("・")}
           </p>
+          {result.type_names.length > 1 && (
+            <p className="mt-1 text-xs font-medium text-white/80">
+              複数タイプに該当しています
+            </p>
+          )}
         </div>
         <ResultCard
-          eyebrow="AI診断結果"
+          eyebrow="診断結果"
           body={result.current_state}
           tone="empathy"
-        />
-        <ResultCard
-          eyebrow="なぜ今までうまくいかなかったのか"
-          body={result.past_failure_reason}
-          tone="insight"
         />
         <ResultCard
           eyebrow="腸もみが必要な理由"

@@ -1,7 +1,7 @@
 import { QUESTIONS } from "./questions";
 import { GUT_TYPES, YES_ANSWER, type Answers, type GutType } from "./types";
 
-export function determineGutType(answers: Answers): GutType {
+export function determineGutTypes(answers: Answers): GutType[] {
   const matched = new Map<GutType, number>(GUT_TYPES.map((type) => [type, 0]));
   const total = new Map<GutType, number>(GUT_TYPES.map((type) => [type, 0]));
 
@@ -12,24 +12,20 @@ export function determineGutType(answers: Answers): GutType {
     }
   }
 
-  let best: GutType = GUT_TYPES[0];
-  let bestRatio = -1;
-  let bestMatched = -1;
+  const ratios = new Map<GutType, number>();
+  let bestRatio = 0;
 
   for (const type of GUT_TYPES) {
     const typeTotal = total.get(type) ?? 0;
     const typeMatched = matched.get(type) ?? 0;
     const ratio = typeTotal === 0 ? 0 : typeMatched / typeTotal;
-
-    if (
-      ratio > bestRatio ||
-      (ratio === bestRatio && typeMatched > bestMatched)
-    ) {
-      best = type;
-      bestRatio = ratio;
-      bestMatched = typeMatched;
-    }
+    ratios.set(type, ratio);
+    if (ratio > bestRatio) bestRatio = ratio;
   }
 
-  return best;
+  if (bestRatio === 0) {
+    return [GUT_TYPES[0]];
+  }
+
+  return GUT_TYPES.filter((type) => ratios.get(type) === bestRatio);
 }

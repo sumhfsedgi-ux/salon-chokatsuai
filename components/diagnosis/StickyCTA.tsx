@@ -9,7 +9,7 @@ export default function StickyCTA() {
           {PRICING.original}
         </span>
         <span className="font-bold text-rose-600">
-          ➔ 診断者限定 初回{PRICING.discounted}
+          ➔ 初回{PRICING.discounted}
         </span>
       </p>
       <a
